@@ -1,8 +1,7 @@
 import torch
-from transformers import AutoProcessor, Qwen2VLForConditionalGeneration, TrainingArguments
+from transformers import AutoProcessor, Qwen2VLForConditionalGeneration, TrainingArguments, Trainer
 from peft import LoraConfig, get_peft_model
 from datasets import load_dataset
-from trl import SFTTrainer
 import os
 from huggingface_hub import login
 
@@ -105,14 +104,13 @@ def main():
         batch["labels"] = batch["input_ids"].clone()
         return batch
 
-    # Train using TRL's SFT Trainer
+    # Train using standard Trainer (SFTTrainer had version conflicts and we already format manually)
     print("Starting fine-tuning...")
-    trainer = SFTTrainer(
+    trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=formatted_dataset,
-        data_collator=collate_fn,
-        dataset_text_field="text" # SFTTrainer requires this, though we use a custom collator
+        data_collator=collate_fn
     )
 
     trainer.train()
