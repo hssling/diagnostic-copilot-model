@@ -27,7 +27,7 @@ if ADAPTER_ID:
     model.load_adapter(ADAPTER_ID)
 
 # 2. Main API Function called by our Next App
-def diagnose_api(history: str, examination: str, image: Image.Image = None, audio_path: str = None):
+def diagnose_api(history: str, examination: str, image: Image.Image = None, audio_path: str = None, temp: float = 0.2, max_tokens: int = 1500):
     try:
         if image is None:
             # Fallback if no image is passed
@@ -58,7 +58,7 @@ def diagnose_api(history: str, examination: str, image: Image.Image = None, audi
         ).to(device)
 
         with torch.no_grad():
-            generated_ids = model.generate(**inputs, max_new_tokens=1024, temperature=0.2)
+            generated_ids = model.generate(**inputs, max_new_tokens=int(max_tokens), temperature=float(temp), top_p=0.9, do_sample=True)
 
         generated_ids_trimmed = [
             out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
@@ -80,7 +80,9 @@ demo = gr.Interface(
         gr.Textbox(lines=5, label="Patient History (String)", placeholder="Age, symptoms, past medical history..."),
         gr.Textbox(lines=5, label="Examination Findings (String)", placeholder="Vitals, systemic exam..."),
         gr.Image(type="pil", label="Diagnostic Scan / Image"),
-        gr.Audio(type="filepath", label="Optional Dictation Audio", visible=False) # Qwen-VL does not naturally support audio, handling externally or ignoring
+        gr.Audio(type="filepath", label="Optional Dictation Audio", visible=False),
+        gr.Slider(minimum=0.0, maximum=1.0, value=0.2, step=0.1, label="Temperature (Creativity)"),
+        gr.Slider(minimum=256, maximum=4096, value=1500, step=256, label="Max Output Tokens")
     ],
     outputs=gr.Markdown(label="Clinical Report Output"),
     title="Multi-Modal Diagnostic Co-Pilot API (Trained via Kaggle)",
