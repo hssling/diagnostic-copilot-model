@@ -89,5 +89,4 @@ demo = gr.Interface(
     description="This Space hosts the fine-tuned medical vision-language model for the Diagnostic Co-Pilot ecosystem."
 )
 
-if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+
