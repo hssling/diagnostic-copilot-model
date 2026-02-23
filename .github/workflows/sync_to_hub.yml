@@ -21,4 +21,5 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           # Make sure to replace your_username/diagnostic-copilot-api with your actual Hugging Face Space ID
-          git push https://hssling:$HF_TOKEN@huggingface.co/spaces/hssling/diagnostic-copilot-api main
+          git remote add space https://hssling:$HF_TOKEN@huggingface.co/spaces/hssling/diagnostic-copilot-api
+          git push --force space master:main
