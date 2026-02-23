@@ -1,6 +1,6 @@
 import gradio as gr
 import torch
-from transformers import AutoProcessor, AutoModelForVision2Seq
+from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 from PIL import Image
 
 # 1. HuggingFace Space Deployment Settings
@@ -16,7 +16,7 @@ print(f"Loading {MODEL_ID}...")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 processor = AutoProcessor.from_pretrained(MODEL_ID)
-model = AutoModelForVision2Seq.from_pretrained(
+model = Qwen2VLForConditionalGeneration.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.float16 if device == "cuda" else torch.float32,
     device_map="auto"

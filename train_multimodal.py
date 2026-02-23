@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoProcessor, AutoModelForVision2Seq, TrainingArguments
+from transformers import AutoProcessor, Qwen2VLForConditionalGeneration, TrainingArguments
 from peft import LoraConfig, get_peft_model
 from datasets import load_dataset
 from trl import SFTTrainer
@@ -28,7 +28,7 @@ def main():
     # Load processor and model with memory-efficient 4-bit quantization
     processor = AutoProcessor.from_pretrained(MODEL_ID)
     
-    model = AutoModelForVision2Seq.from_pretrained(
+    model = Qwen2VLForConditionalGeneration.from_pretrained(
         MODEL_ID,
         device_map="auto",
         torch_dtype=torch.float16,
