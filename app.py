@@ -8,7 +8,7 @@ MODEL_ID = "Qwen/Qwen2-VL-2B-Instruct" # Base model
 # To use your fine-tuned model from Kaggle:
 # 1. model.push_to_hub("your-name/med-qwen-vl-adapter")
 # 2. Add adapter load here for PEFT
-ADAPTER_ID = None
+ADAPTER_ID = "hssling/med-qwen-vl-adapter"
 
 # Initialize Model and Processor globally
 print("Starting App Engine...")
